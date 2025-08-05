@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>D° FDZ | COTIZAR  </title>
+</head>
+<body>
+
+
+<div class="slide">
+  <h1>Arma tu cotización</h1>
+ <form id="formCotizacion">
+ 
+    <!-- Logo -->
+  <div class="logo-container">
+     <a href="https://eliandfdz.github.io/index.html/" target="_blank">
+    <img src="Sin título-12.png" alt="Logo">
+    </a>
+  </div>
+
+  <!-- 🖌️ Diseño gráfico y branding -->
+  <div class="categoria" >Diseño gráfico y branding</div>
+  <div class="servicio"><label><input type="checkbox" value="500"> Rediseño de logo – $500</label></div>
+  <div class="servicio"><label><input type="checkbox" value="400"> Paleta de colores y tipografía – $400</label></div>
+
+  <!-- 🌐 Sitio web -->
+  <div class="categoria" >Sitio web</div>
+  <div class="servicio"><label><input type="checkbox" value="1200"> Página de inicio personalizada (Precio Inicial) – $1,200</label></div>
+  <div class="servicio">
+    <label>
+      <input type="checkbox" id="paginaAdicionalCheckbox">
+      Página adicional – $500 c/u
+    </label>
+    <div class="cantidad-control">
+      <button type="button" class="btn-cantidad" onclick="cambiarCantidad(-1)">−</button>
+      <input type="number" id="cantidadPaginas" class="cantidad" value="1" min="1" disabled>
+      <button type="button" class="btn-cantidad" onclick="cambiarCantidad(1)">+</button>
+    </div>
+  </div>
+  <div class="servicio"><label><input type="checkbox" value="500"> Galería – $500</label></div>
+  <div class="servicio"><label><input type="checkbox" value="400"> Formulario de Contacto – $400</label></div>
+  <div class="servicio"><label><input type="checkbox" value="300"> Mapa de google – $300</label></div>
+  <div class="servicio"><label><input type="checkbox" value="800"> Página en varios idiomas – $800</label></div>
+  <div class="servicio"><label><input type="checkbox" value="400"> Animaciones – $400</label></div>
+  <div class="servicio"><label><input type="checkbox" value="500"> Video tutorial – $500</label></div>
+
+  <!-- 🛒 E-commerce -->
+  <div class="categoria" >E-commerce</div>
+  <div class="servicio"><label><input type="checkbox" value="1000"> Tienda en línea (10 productos) – $1,000</label></div>
+  <div class="servicio"><label><input type="checkbox" value="800"> Carrito de compras – $800</label></div>
+  <div class="servicio"><label><input type="checkbox" value="800"> Pasarela de pagos – $800</label></div>
+  <div class="servicio"><label><input type="checkbox" value="800"> Configuración de envíos – $800</label></div>
+
+  <!-- 🔒 Técnico -->
+  <div class="categoria" >Técnico</div>
+  <div class="servicio"><label><input type="checkbox" value="900"> Hosting por 1 año – $900</label></div>
+  <div class="servicio"><label><input type="checkbox" value="600"> Hosting por 1 mes – $600</label></div>
+  <div class="servicio"><label><input type="checkbox" value="500"> Dominio por 1 año – $500</label></div>
+  <div class="servicio"><label><input type="checkbox" value="800"> Certificado SSL – $800</label></div>
+  <div class="servicio"><label><input type="checkbox" value="200"> Correo empresarial – $200</label></div>
+
+  <!-- 📈 Marketing digital -->
+  <div class="categoria" >Marketing digital</div>
+  <div class="servicio"><label><input type="checkbox" value="600"> SEO básico – $600</label></div>
+  <div class="servicio"><label><input type="checkbox" value="800"> Estrategia digital (Inicial) – $800</label></div>
+  <div class="servicio"><label><input type="checkbox" value="500"> Redes Sociales – $500</label></div>
+
+  <!-- 📸 Extras -->
+  <div class="categoria" data-icon="📸">Extras</div>
+  <div class="servicio"><label><input type="checkbox" value="800"> Fotografías – $800</label></div>
+ 
+  
+</form>
+
+
+<div class="total" id="total">Total: $0</div>
+<button class="boton" onclick="calcularTotal()">Calcular Total</button>
+</div>
+ <div class="contact-section">
+<form action="https://formspree.io/f/mvgqwpyo" method="POST" >
+  <input type="hidden" name="message" id="resumenCotizacion">
+  <input type="hidden" name="_template" value="table">
+  <input type="text" name="nombre" placeholder="Tu nombre" required>
+  <input type="email" name="email" placeholder="Tu correo" required>
+  <button type="submit">Enviar mi cotización</button>
+</form>
+
+</div>
+
+
+<script>
+  const checkboxPagAdicional = document.getElementById("paginaAdicionalCheckbox");
+const inputCantidadPaginas = document.getElementById("cantidadPaginas");
+const totalDiv = document.getElementById("total");
+
+checkboxPagAdicional.addEventListener("change", () => {
+  inputCantidadPaginas.disabled = !checkboxPagAdicional.checked;
+  calcularTotal();
+});
+
+inputCantidadPaginas.addEventListener("input", calcularTotal);
+
+function cambiarCantidad(valor) {
+  if (inputCantidadPaginas.disabled) return;
+
+  let cantidad = parseInt(inputCantidadPaginas.value) || 1;
+  cantidad += valor;
+  if (cantidad < 1) cantidad = 1;
+
+  inputCantidadPaginas.value = cantidad;
+  calcularTotal();
+}
+
+function calcularTotal() {
+  let total = 0;
+
+  const checkboxes = document.querySelectorAll('#formCotizacion input[type="checkbox"]:checked');
+  checkboxes.forEach(el => {
+    if (el === checkboxPagAdicional) {
+      const cantidad = parseInt(inputCantidadPaginas.value) || 1;
+      total += 500 * cantidad;
+    } else {
+      total += parseInt(el.value);
+    }
+  });
+
+  totalDiv.textContent = `Total: $${total}`;
+}
+
+// Actualizar resumen antes de enviar
+// Aquí es importante que el formulario que envías sea el que contiene el input oculto y los datos personales
+document.querySelector('.contact-section form').addEventListener('submit', function (e) {
+  const checkboxes = document.querySelectorAll('#formCotizacion input[type="checkbox"]:checked');
+  let resumen = 'Servicios seleccionados:\n\n';
+  let total = 0;
+
+  checkboxes.forEach(box => {
+    const texto = box.parentNode.textContent.trim();
+    const precio = parseInt(box.value);
+    if (box === checkboxPagAdicional) {
+      const cantidad = parseInt(inputCantidadPaginas.value) || 1;
+      resumen += `- ${texto} x ${cantidad}\n`;
+      total += precio * cantidad;
+    } else {
+      resumen += `- ${texto}\n`;
+      total += precio;
+    }
+  });
+
+  resumen += `\nTotal: $${total}`;
+  document.getElementById('resumenCotizacion').value = resumen;
+});
+
+// Ejecuta al cargar para inicializar total correcto
+calcularTotal();
+
+</script>
